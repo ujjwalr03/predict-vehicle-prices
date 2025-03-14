@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.impute import SimpleImputer
@@ -20,7 +21,7 @@ cat_cols = ['engine', 'fuel', 'transmission', 'trim', 'body', 'exterior_color', 
 df[cat_cols] = df[cat_cols].fillna('Unknown')
 
 # One-hot encoding
-encoder = OneHotEncoder(drop='first', sparse=False, handle_unknown='ignore')
+encoder = OneHotEncoder(drop='first', sparse_output=False, handle_unknown='ignore')
 encoded_features = encoder.fit_transform(df[cat_cols])
 encoded_df = pd.DataFrame(encoded_features, columns=encoder.get_feature_names_out(cat_cols))
 
@@ -42,7 +43,7 @@ model.fit(X_train, y_train)
 # Predict and evaluate
 y_pred = model.predict(X_test)
 mae = mean_absolute_error(y_test, y_pred)
-rmse = mean_squared_error(y_test, y_pred, squared=False)
+rmse = np.sqrt(mean_squared_error(y_test, y_pred))
 r2 = r2_score(y_test, y_pred)
 
 # Print results
